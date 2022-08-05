@@ -73,3 +73,44 @@ O VirtualBox cria uma mudança no sistema operacional Windows e na máquina virt
 Indo em "Arquivo(F) > Host Network Manager...", abrimos uma janela chamada "Gerenciador de Redes do Hospedeiro" onde podemos observar o adaptador "Ethernet VirtualBox Host-Only Network" configurado com as alterações no sistema que permitem o acesso à MV.
 
 No próximo vídeo, veremos as configurações de "DHCP" presentes na documentação e como resolver a questão de recarregar o Vagrant destruindo a máquina virtual e refazendo-a.
+
+
+
+Continuando com as configurações de rede, veremos como funciona a conexão via DHCP. Em alguns casos, o Vagrant não consegue aplicá-las perfeitamente pois estas causam grandes alterações nas máquinas virtuais que podem causar problemas.
+
+Logo, pode ser necessária a destruição e recriação da MV. E como está tudo registrado no arquivo "Vagrantfile" representando a infraestrutura do código, a reprodução do ambiente é facilitada.
+
+Para destruir a máquina virtual, basta executar o comando `vagrant destroy` no terminal que simula o sistema Linux. Repare que ao final da operação, a entrada "bionic_default" desaparece do Oracle VM VirtualBox Gerenciador, porém o box Ubuntu permanece.
+
+Na documentação "Private Network" do Vagrant, há a parte "DHCP" que fornece a implantação do box com as configurações dessa conexão, substituindo a linha que possui o PI no documento "Vagrantfile".
+
+```
+config.vm.network "private_network", type: "dhcp"
+end
+```
+
+Após salvar a alteração no editor de texto, dê o comando `vagrant up` no terminal para importar o pacote. Note que a nova entrada é gerada no VirtualBox. Alguma mudança ocorre no sistema operacional neste processo novamente, então responda positivamente caso haja alguma pergunta de confirmação.
+
+Ainda, são apresentados dois adaptadores iguais aos anteriores: `net` e `hostonly`. Ao final da importação, limpe a tela e execute `ipconfig` para ver as três entradas do Windows. Repare que a máscara de "Adaptador Ethernet VirtualBox Host-Only Network #2" foi alterada em relação à ultima vez que vimos.
+
+Na janela do VirtualBox, vá em "Arquivo(F) > Host Network Manager..." para verificar as novas entradas e os arranjos de IP privados. Repare que o programa apresenta uma coluna que indica se o Servidor DHCP está habilitado para as entradas, sendo que a segunda está.
+
+O VirtualBox possui um servidor DHCP interno que é criado após estes processos que realizamos. Pode parecer um pouco confuso que a ferramenta não tenha usado esta conexão que possivelmente você tem em sua rede. Geralmente, esta já está embutida em roteadores e Wi-Fi.
+
+Nas configurações da máquina virtual "bionic_default", ao clicar em "Rede" e depois selecionar a aba de "Adaptador 2", repare que o sistema está usando aquele cujo servidor DHCP está embutido. Cancele e feche esta janela.
+
+De volta ao simulador, acessamos a MV novamente digitando `vagrant ssh`. No resultado da execução o `IP address for enp0s8: 172.28.128.5` é dinamicamente associado à esta graças ao servidor DHCP do próprio VirtualBox.
+
+Então, copie este endereço de IP para colar no espaço de busca do navegador e acessar o Nginx.
+
+A página não é encontrada porque destruímos nossa máquina virtual anterior e ainda não reinstalamos o Nginx manualmente.
+
+Logo, devemos escrever `sudo apt-get update && sudo apt-get install -y nginx` no terminal.
+
+Vemos então que somente o Vagrant não produz a infraestrutura do código por completo, sendo necessária uma série de ajustes e provisionamento com outras ferramentas.
+
+Terminada a instalação, limpe a tela e digite `netstat -tln` para verificar o funcionamento do Nginx pela porta 80. Para testar, volte ao navegador e teste novamente o acesso por `localhost:8089` em uma aba e `172.28.128.5` na outra.
+
+No caso de múltiplas máquinas virtuais, fez sentido que o VirtualBox administre os IP's delas. Mas em uma situação de empresa com vários computadores, nossas configurações permitem o acesso somente pelo host do Windows que usamos.
+
+No passo seguinte, veremos como tornar acessível à vários terminais através da chave pública.
