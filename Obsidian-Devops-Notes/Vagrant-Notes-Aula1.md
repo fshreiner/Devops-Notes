@@ -46,3 +46,36 @@ A primeira que usaremos neste curso, é a instalação de um terminal que simula
 
 Neste, acesse o diretório do projeto escrevendo `cd /d/ambiente_dev/`, tecle "Enter" e escreva `pwd` para aceder o arquivo. Por fim, podemos executar o comando anterior digitando `vagrant ssh` para conectar.
 
+
+Para saber mais: Tipos de Hypervisor
+
+Um _Hypervisor_, também conhecido como monitor de máquina virtual, é um processo que cria e executa máquinas virtuais (VMs). Um _Hypervisor_ permite que um computador _host_ suporte múltiplas VMs, compartilhando virtualmente seus recursos, como memória e processamento.
+
+Exemplos de _Hypervisors_ são:
+
+-   Hyper-V
+-   vSphere
+-   Parallels
+-   VMware
+-   Virtualbox
+-   entre outros.
+
+Existem dois _tipos de Hypervisors_: **Tipo 1** e **Tipo 2**.
+
+Os _Hypervisors_ do **Tipo 1** são chamados de "bare metal", pois são executados diretamente no hardware do _host_. Exemplos disso são **Hyper-V** e **vSphere** (entre vários outros).
+
+Os _Hypervisors_ do **Tipo 2** rodam como uma aplicação em cima do sistema operacional. Exemplos são o **VirtualBox** e **VMware**.
+
+Nesta aula, aprendemos que:
+
+-   **VirtualBox**, **VMware**, **Hyper-V**, entre outros, são **_Hypervisors_**
+-   Um _Hypervisor_ emula o hardware do computador para criar e executar máquinas virtuais
+-   O **Vagrant** é uma ferramenta que controla o _Hypervisor_ a partir de um arquivo simples, o **Vagrantfile**
+-   O **Vagrantfile** define detalhes da máquina virtual, como o sistema operacional, a rede, software utilizado, etc
+-   O comando `vagrant init <box>` cria um **Vagrantfile**
+-   A box é baixada da internet e possui a imagem do sistema operacional, entre outras configurações
+-   Para inicializar e rodar a VM com Vagrant, usa-se o comando: `vagrant up`
+-   O comando `vagrant status` mostra detalhes sobre o status da máquina virtual
+-   Para se conectar com a máquina virtual, usamos a ferramenta SSH
+
+
