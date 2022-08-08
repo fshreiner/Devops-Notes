@@ -114,3 +114,52 @@ Terminada a instalação, limpe a tela e digite `netstat -tln` para verificar 
 No caso de múltiplas máquinas virtuais, fez sentido que o VirtualBox administre os IP's delas. Mas em uma situação de empresa com vários computadores, nossas configurações permitem o acesso somente pelo host do Windows que usamos.
 
 No passo seguinte, veremos como tornar acessível à vários terminais através da chave pública.
+
+
+IP NA REDE PÚBLICA (BRIDGE)
+Neste passo veremos sobre as conexões com chave pública ou _Public Network_, que possibilita o acesso à máquina virtual por diversos computadores em uma única rede pública, enquanto no _Private Network_ só é possível acessá-la através do host, ou seja, a partir de um computador específico.
+
+Na parte "Public Networks" da documentação do Vagrant, temos a configuração da conexão DHCP para este tipo de rede. No arquivo "Vagrantfile" no editor de texto, substituímos a sentença `config.vm.network "private_network", type: "dhcp"` por:
+
+```
+Vagrant.configure("2") do |config|
+    config.vm.network "public_network"
+end
+```
+
+Salvas as alterações, vá ao terminal da máquina virtual, encerre digitando `exit` e limpe a tela. Depois verifique se esta está rodando escrevendo `vagrant status` e depois recarregue com `vagrant reload` para executar as novas configurações de rede. Caso dê erro, repita o procedimento de destruição e restituição da MV como já fizemos anteriormente.
+
+Durante o processo, observe a entrada no Oracle VM VirtualBox Gerenciador sendo encerrada e restabelecida. Enquanto no terminal podemos ver outra diferença no `Adapter 2: bridged` como já apresentada na documentação, indicando que a rede está configurada no modo _bridged_ para a máquina virtual fazer parte da rede pública da empresa conectando-se ao DHCP desta.
+
+Verificamos que o host não criou estes adaptadores e que também temos um novo IP válido diferente do anterior quando executamos o comando `ipconfig`, o qual é apresentado com a mesma máscara acessando a MV com `vagrant ssh`, tornando-a acessível por vários computadores pertencentes à mesma rede usando este mesmo número. Para provar, copie-o e cole-o no navegador.
+
+Voltando à documentação de Public Network no portal Vagrant, há a configuração do IP estático; Podemos usá-lo se soubermos que está disponível na rede para não haver conflito utilizando um IP já em uso. Obtemos:
+
+```
+Vagrant.configure("2") do |config|
+    config.vm.network "public_network", ip: "192.168.1.24"
+end
+```
+
+Confira o funcionamento colocando `vagrant reload` no terminal. No VirtualBox, acesse as configurações da entrada "bionic_default" para clicar em "Rede" e depois em "Adaptador 2"; observamos que a conexão do adaptador virtual está conectado à rede real no sistema hospedeiro pela placa em modo _Bridge_. Teste novamente inserindo o número de IP no navegador para apresentar a página no Nginx.
+
+Isso nos possibilita instalar um banco de dados como o Oracle por exemplo de modo a ser acessado pelos desenvolvedores usando os computadores conectados à chave pública. Com isso, nossas configurações de rede estão estabelecidas.
+
+
+
+Nesta aula, aprendemos que:
+
+-   Existem 3 formas para configurar a rede:
+    -   **_Forwarded Port_**
+    -   **_Private Network_**
+    -   **_Public Network_**
+-   Na configuração _Forwarded Port_, mapeamos uma porta do _host_ para o _guest_, por exemplo:
+    
+    ```
+    config.vm.network "forwarded_port", guest: 80, host: 8080,
+    ```
+    
+-   Na _Private Network_ (_static_ ou _dhcp_) é usado um endereço privado que não é acessível na sua rede pública (por exemplo, a rede empresarial)
+-   Na _Public Network_ (_static_ ou _dhcp_), usamos um endereço que faz parte da sua rede pública (por exemplo, da rede empresarial)
+-   Com o comando `vagrant halt` podemos parar a execução da máquina virtual
+-   O comando `vagrant reload` recarrega a configuração da máquina virtual
