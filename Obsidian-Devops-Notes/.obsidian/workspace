@@ -9,7 +9,7 @@
         "state": {
           "type": "markdown",
           "state": {
-            "file": "Vagrant-Notes-Aula7.md",
+            "file": "Vagrant-Notes-Aula8.md",
             "mode": "source",
             "source": false
           }
@@ -77,7 +77,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Vagrant-Notes-Aula7.md",
+                "file": "Vagrant-Notes-Aula8.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -94,7 +94,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Vagrant-Notes-Aula7.md",
+                "file": "Vagrant-Notes-Aula8.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -117,7 +117,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Vagrant-Notes-Aula7.md"
+                "file": "Vagrant-Notes-Aula8.md"
               }
             }
           }
@@ -130,6 +130,7 @@
   },
   "active": "847eb06d5b66de9b",
   "lastOpenFiles": [
+    "Vagrant-Notes-Aula7.md",
     "Vagrant-Notes-Aula6.md",
     "Vagrant-Notes-Aula5.md",
     "Token-GIT.md",
